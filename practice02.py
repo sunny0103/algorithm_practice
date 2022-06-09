@@ -135,10 +135,103 @@
 #         result*=i
 # print(result)
 
-## 문자열 뒤집기
+# ## 문자열 뒤집기
+# s = input()
+# count0 = 0  # 전부 0 으로 바꾸는 경우
+# count1 = 0 # 전부 1로 바꾸는 경우
 
+# # 첫 번째 원소
+# if s[0] =='1':
+#     count0 += 1
+# else:
+#     count1 += 1
 
+# #두번재 원소부터 
+# for i in range(len(s)-1):
+#     if s[i] != s[i+1]:
+#         if s[i+1] == '1':
+#             count0 += 1
+#         else:
+#             count1 += 1
+# print(min(count0,count1))
         
+# ## 만들수 없는 금액
+# # 동전의 갯수 입력
+# n = int(input())
+# # 화폐단위 입력, 오름차순 정렬
+# c = list(map(int, input().split()))
+# c.sort()
+# # 가능한 동전 금액 
+# total = []
 
+# for i in range(n):
+#     for j in range(1, n+1):
+#         if i<=j:
+#             total.append(sum(c[i:j]))
 
+# # 만들수 있는 동전중 최소값 출력
+# total = list(set(total))
+# for i in range(max(total)+1):
+#     if i not in total:
+#         print(i)
+#         break
 
+# ## from book
+# n = int(input())
+# data = list(map(int, input().split()))
+# data.sort()
+
+# target = 1
+# for x in data:
+#     if target < x:
+#         break
+#     target+=x
+# print(target)
+
+# ## 볼링공 고르기
+# ## from book
+# # 볼링공 갯수 공의 무게 입력
+# n, m = map(int, input().split())
+# # 볼링공 무게 입력
+# data = list(map(int, input().split()))
+# # 1-10까지 무게를 담을 수 있는 리스트
+# array = [0] * 11
+
+# for x in data:
+#     array[x]+=1
+
+# result = 0
+# for i in range(1, m+1):
+#     n-=array[i]
+#     result += array[i]*n
+# print(result)
+
+# ##  무지의 먹방 라이브
+# ## my answer
+# def solution(food_times, k):
+#     if sum(food_times) < k:
+#         return -1
+#     while sum(food_times) >0 and k>=0:
+#         for idx in range(len(food_times)):
+#             if food_times[idx] !=0 and k!=0:
+#                 food_times[idx]-=1
+#                 k-=1
+#             elif food_times[idx] !=0 and k ==0:
+#                 return idx+1
+#             elif food_times[idx] ==0 and k!=0:
+#                 continue
+#             else:
+#                 return idx+1
+
+# print(solution([3,1,2], 5))
+
+## from book
+import heapq
+def solution(food_times, k):
+    # 음식 전체를 먹는 시간보다 k가 더 크거나 같다면 -1
+    if sum(food_times) <= k:
+        return -1
+    # 시간이 작은 음식부터 빼야 하므로 우선순위 큐 사용
+    ,
+
+                
