@@ -247,3 +247,97 @@ lock =[[1, 1, 1], [1, 1, 0], [1, 0, 1]]
 print(solution(key, lock))
 
 
+## 뱀
+# from book
+n = int(input())
+k = int(input())
+# 정사각형 보드 만들기
+data = [[0]*(n+1) for _ in range(n+1)]
+# 사과의 위치
+for _ in range(k):
+    r, c = map(int, input().split())
+    data[r][c] = 1 
+
+# 뱀의 변환 횟수 입력
+l = int(input())
+info = []
+for _ in range(l):
+    x, c = input().split()
+    info.append((int(x), c))
+
+# 동남서북
+dx = [0, 1, 0, -1]
+dy = [1, 0, -1, 0]
+
+def turn(direction, c):
+    if c =='L':
+        direiction = (direction-1) % 4
+    else:
+        direction = (direction+1) % 4
+    return direction
+
+def simulate():
+    x, y= 1, 1
+    data[x][y] = 2 # 뱀이 존재하는 위치
+    direction = 0 #처음에는 동쪽을 보고 있음
+    time = 0 #시작한 뒤에 초
+    index = 0 #다음에 회전할 정보
+    q = [(x, y)]  # 뱀이 차지하고 있는 위치 정보
+    while True:
+        nx = x + dx[direction]
+        ny = y + dy[direction]
+        # 맵 범위 안에 있고 뱀의 몸통이 없는 위치
+        if 1<= nx and nx<=n and 1<=ny and ny <=n and data[nx][ny] !=2:
+             #사과가 없다면 이동후에 꼬리 제거
+             if data[nx][ny] == 0:
+                data[nx][ny] = 2
+                q.append((nx, ny))
+                px, py = q.pop(0)
+                data[px][py] = 0
+            #사과가 있다면 이동후 꼬리 그대로 두기
+             if data[nx][ny] == 1:
+                data[nx][ny] = 2
+                q.append((nx, ny))
+        # 벽이나 몸통과 부딪쳤다면
+        else:
+            time+=1
+            break
+        x, y = nx, ny # 다음 위치로 머리 이동
+        time +=1
+        if index < l and time == info[index][0]: #회전할 시간인 경우
+            direction = turn(direction, info[index][1])
+            index+=1
+    return time
+print(simulate())
+
+## 기둥과 보 설치
+# from book
+# 현재 설치된 구조물이 가능한 구조물인지 확인하는 함수
+def possible(answer):
+    for x, y , stuff in answer:
+        if stuff == 0: #설치된 것이 기둥인 경우
+             # 바닥위 혹은 보의 한쪽 끝부분 위 혹은 다른 기둥 위 라면 정상
+            if y == 0 or [x-1, y, 1] in answer or [x, y, 1] in answer or [x, y,-1, 0] in answer:
+                continue
+            return False
+        elif stuff ==1: # 설치된 것이 보라면
+            # 한쪽 끝부분 기둥 위 혹은 양쪽 끝부분이 다른 보와 동시에 연결이라면 정상
+            if [x,  y-1, 0] in answer or [x+1, y, 1] in answer or ([x-1, y, 1] in answer and [x+1, y, 1] in answer):
+                continue
+            return False
+    return True
+
+def solution(n, build_frame):
+    answer = []
+    for frame in build_frame:
+        x, y, stuff, operate = frame
+        if operate == 0: #삭제하는 경우
+            answer.remove([x, y, stuff]) #일단 삭제
+            if not possible(answer):
+                answer.append([x, y, stuff]) #가능한 구조물이 아니라면 다시 설치
+        if operate ==1:
+            answer.append([x, y, stuff]) #일단 설치
+            if not possible(answer):
+                answer.remove([x, y, stuff])
+    return sorted(answer)
+print(solution(5,[[1,0,0,1],[1,1,1,1],[2,1,0,1],[2,2,1,1],[5,0,0,1],[5,1,0,1],[4,2,1,1],[3,2,1,1]]))
